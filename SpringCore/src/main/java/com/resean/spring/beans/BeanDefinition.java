@@ -1,4 +1,4 @@
-package com.resean.spring.bean;
+package com.resean.spring.beans;
 
 /**
  * Bean定义，用于描述Bean的属性，包括Bean的类名、Bean的属性、Bean的依赖等

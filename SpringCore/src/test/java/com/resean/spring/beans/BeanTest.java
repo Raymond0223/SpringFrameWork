@@ -1,6 +1,6 @@
-package com.resean.spring.bean;
+package com.resean.spring.beans;
 
-import com.resean.spring.ClassPathXmlApplicationContext;
+import com.resean.spring.context.ClassPathXmlApplicationContext;
 
 public class BeanTest {
 

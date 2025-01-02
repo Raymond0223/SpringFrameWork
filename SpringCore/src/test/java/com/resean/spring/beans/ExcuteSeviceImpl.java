@@ -1,4 +1,4 @@
-package com.resean.spring.bean;
+package com.resean.spring.beans;
 
 public class ExcuteSeviceImpl implements ExcuteSevice{
     public void excute() {
