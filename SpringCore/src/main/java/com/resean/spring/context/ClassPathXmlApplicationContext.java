@@ -3,6 +3,7 @@ package com.resean.spring.context;
 import com.resean.spring.beans.BeanDefinition;
 import com.resean.spring.beans.BeanFactory;
 import com.resean.spring.beans.SimpleBeanFactory;
+import com.resean.spring.core.BeanException;
 import com.resean.spring.resource.ClassPathXmlResource;
 import com.resean.spring.resource.Reource;
 import com.resean.spring.resource.XmlBeanDefinitionReader;
@@ -41,7 +42,7 @@ public class ClassPathXmlApplicationContext {
 
     public ClassPathXmlApplicationContext(String fileName){
         Reource classPathXmlResource=new ClassPathXmlResource(fileName);
-        BeanFactory factory=new SimpleBeanFactory();
+        SimpleBeanFactory factory=new SimpleBeanFactory();
         XmlBeanDefinitionReader xmlBeanDefinitionReader=new XmlBeanDefinitionReader(factory);
         xmlBeanDefinitionReader.loadBeandefinitions(classPathXmlResource);
         this.beanFactory=factory;
@@ -90,7 +91,7 @@ public class ClassPathXmlApplicationContext {
 //    }
     /********************v1 ***********************/
 
-    public Object getBean(String beanName){
+    public Object getBean(String beanName) throws BeanException {
 
         return beanFactory.getBean(beanName);
 
@@ -98,8 +99,17 @@ public class ClassPathXmlApplicationContext {
 //        return singgleton.get(beanName);
     }
 
-    public void registerBeanDefinition(BeanDefinition beanDefinition){
-        beanFactory.registerBeanDefinition(beanDefinition);
+//    public void registerBeanDefinition(BeanDefinition beanDefinition){
+//        beanFactory.registerBeanDefinition(beanDefinition);
+//    }
+
+
+    public boolean constainBean(String beanName){
+        return beanFactory.containsBean(beanName);
+    }
+
+    public void registerBean(String beanName,Object object){
+        this.beanFactory.registerBean(beanName,object);
     }
 
 

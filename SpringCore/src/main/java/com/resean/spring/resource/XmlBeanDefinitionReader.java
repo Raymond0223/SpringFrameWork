@@ -2,6 +2,7 @@ package com.resean.spring.resource;
 
 import com.resean.spring.beans.BeanDefinition;
 import com.resean.spring.beans.BeanFactory;
+import com.resean.spring.beans.SimpleBeanFactory;
 import org.dom4j.Element;
 
 /**
@@ -9,9 +10,9 @@ import org.dom4j.Element;
  */
 public class XmlBeanDefinitionReader {
 
-    private BeanFactory beanFactory;
+    private SimpleBeanFactory beanFactory;
 
-    public XmlBeanDefinitionReader(BeanFactory beanFactory) {
+    public XmlBeanDefinitionReader(SimpleBeanFactory beanFactory) {
         this.beanFactory = beanFactory;
     }
 
