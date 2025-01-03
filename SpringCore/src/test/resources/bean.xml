@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <beans>
-    <bean id = "excuteSevice" class = "com.resean.spring.beans.ExcuteSeviceImpl"></bean>
+    <bean id = "excuteSevice" class = "com.resean.spring.beans.ExcuteSeviceImpl">
+        <constructor-arg type="String" name="msg" value="abc"/>
+        <property name = "msg"  value = "this is ExcuteSeviceImpl" type="String"></property>
+    </bean>
+
 </beans>

@@ -43,6 +43,6 @@ public class DefaultSingletonBeanRegistry implements SingletonBeanRegistry{
             singletontMap.remove(beanName);
             singletonName.remove(beanName);
         }
-
     }
+
 }

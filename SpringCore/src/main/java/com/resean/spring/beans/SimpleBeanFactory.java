@@ -1,13 +1,20 @@
 package com.resean.spring.beans;
 
 import com.resean.spring.core.BeanException;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Currency;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 简单的 bean工厂实现类
  */
-public class SimpleBeanFactory extends DefaultSingletonBeanRegistry implements BeanFactory{
+public class SimpleBeanFactory extends DefaultSingletonBeanRegistry implements BeanFactory,BeanDefinitionResgistry{
 
 
     /*************** v2 ****************/
@@ -15,25 +22,34 @@ public class SimpleBeanFactory extends DefaultSingletonBeanRegistry implements B
 //    private List<String> beanNames=new ArrayList<>();
 //    private List<BeanDefinition> beanDefinitions=new ArrayList<>();
 
-    public SimpleBeanFactory() {
-    }
+
     private Map<String,BeanDefinition> beanDefinitions=new ConcurrentHashMap<>(256);
 
+    private Map<String,Object> earlySingletonObjects=new ConcurrentHashMap<>(256);
+
+
+    private List<String> beanNames=new ArrayList<>();
+
+    public SimpleBeanFactory() {
+    }
     @Override
     public Object getBean(String beanName) throws BeanException {
-
         Object bean=this.getSingleton(beanName);
         if (bean==null){
-            BeanDefinition beanDefinition=this.beanDefinitions.get(beanName);
-            if (beanDefinition==null){
-                throw  new BeanException("no Bean!");
+            bean=this.earlySingletonObjects.get(beanName);
+            if (bean ==null){
+                BeanDefinition beanDefinition=this.beanDefinitions.get(beanName);
+                if (beanDefinition==null){
+                    throw  new BeanException("no Bean!");
+                }
+                try {
+                    bean=createBean(beanDefinition);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+                this.registerBean(beanName,bean);
             }
-            try {
-                bean=Class.forName(beanDefinition.getClassName()).newInstance();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-            this.registerBean(beanName,bean);
+
         }
 
 
@@ -65,10 +81,183 @@ public class SimpleBeanFactory extends DefaultSingletonBeanRegistry implements B
         this.registrySingleton(beanName,object);
     }
 
+    @Override
+    public boolean isSingleton(String beanName) {
+        return getBeanDefinition(beanName).isSingleton();
+    }
+
+    @Override
+    public boolean isPrototype(String beanName) {
+        return getBeanDefinition(beanName).isPrototype();
+    }
+
+    @Override
+    public Class<?> getType(String beanName) {
+        return getBeanDefinition(beanName).getClass();
+    }
+
     /*************** v2 ****************/
 //    @Override
     public void registerBeanDefinition(BeanDefinition beanDefinition) {
         beanDefinitions.put(beanDefinition.getId(),beanDefinition);
 //        beanNames.add(beanDefinition.getId());
+    }
+
+    @Override
+    public void registerBeanDefinition(String beanName, BeanDefinition beanDefinition) {
+        this.beanDefinitions.put(beanName,beanDefinition);
+        this.beanNames.add(beanName);
+        if (!beanDefinition.isLazyInit()){
+            try {
+                getBean(beanName);
+            } catch (BeanException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+    }
+
+    private Object createBean(BeanDefinition beanDefinition){
+        Class<?> beanClass=null;
+        Object bean=doCreateBean(beanDefinition);
+        try {
+            beanClass=Class.forName(beanDefinition.getClassName());
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        this.earlySingletonObjects.put(beanDefinition.getId(),bean);
+        //处理 属性参数
+        handleProperty(beanDefinition, beanClass, bean);
+        return bean;
+    }
+
+    private Object doCreateBean(BeanDefinition beanDefinition){
+        Class<?> beanClass=null;
+        Object bean=null;
+        Constructor<?> constructor=null;
+        try {
+            beanClass=Class.forName(beanDefinition.getClassName());
+            //处理构造器参数
+            ArgumentValues argumentValues=beanDefinition.getConstructorArgumentValues();
+            if (!argumentValues.isEmpty()){
+                //参数类型
+                Class<?>[] paramType=new Class[argumentValues.getGenericArgumentValueCount()];
+                //参数值
+                Object[] paramValue=new Object[argumentValues.getGenericArgumentValueCount()];
+                for (int i=0;i<argumentValues.getGenericArgumentValueCount();i++){
+                    ArgumentValue argumentValue=argumentValues.getIndexedArgumentValue(i);
+                    //根据不同类型判断
+                    if ("String".equals(argumentValue.getType())||"java.lang.String".equals(argumentValue.getType())){
+                        paramType[i]=String.class;
+                        paramValue[i]=argumentValue.getValue();
+                    }else if ("Integer".equals(argumentValue.getType())||"java.lang.Integer".equals(argumentValue.getType())){
+                        paramType[i]=Integer.class;
+                        paramValue[i]=Integer.valueOf((String)argumentValue.getValue());
+                    }else if ("int".equals(argumentValue.getType())){
+                        paramType[i]=int.class;
+                        paramValue[i]=Integer.valueOf((String)argumentValue.getValue());
+                    }else {
+                        paramType[i]=String.class;
+                        paramValue[i]=argumentValue.getValue();
+                    }
+                }
+                //按照构造器创建实例
+                constructor=beanClass.getConstructor(paramType);
+                bean=constructor.newInstance(paramValue);
+
+            }else {
+                //有参构造器为空，直接创建实例
+                bean=beanClass.newInstance();
+            }
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        } catch (InvocationTargetException e) {
+            throw new RuntimeException(e);
+        } catch (InstantiationException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+        return bean;
+    }
+
+
+    private  void handleProperty(BeanDefinition beanDefinition, Class<?> beanClass, Object bean) {
+
+        System.out.println("handle properties for bean : " + beanDefinition.getId());
+
+        PropertyValues propertyValues= beanDefinition.getPropertyValues();
+        if (!propertyValues.isEmpty()){
+            for (int i =0;i< propertyValues.size();i++){
+                PropertyValue propertyValue=propertyValues.getPropertyValueList().get(i);
+                String name= propertyValue.getName();
+                String type= propertyValue.getType();
+                Object value=propertyValue.getValue();
+                Class<?> paramType=String.class;
+                Object paramValue=new Object();
+                boolean isRef=propertyValue.isRef();
+
+
+                if (isRef){
+                    if ("String".equals(type)||"java.lang.String".equals(type)){
+                        paramType=String.class;
+                    }else if ("Integer".equals(type)||"java.lang.Integer".equals(type)){
+                        paramType=Integer.class;
+                    }else if ("int".equals(type)){
+                        paramType=int.class;
+                    }
+                    paramValue=value;
+                }else {
+                    try {
+                        paramType=Class.forName(type);
+                        paramValue=getBean((String)value);
+                    } catch (ClassNotFoundException e) {
+                        throw new RuntimeException(e);
+                    } catch (BeanException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                String methodName="set"+name.substring(0,1).toUpperCase()+name.substring(1);
+                try {
+                    Method method= beanClass.getMethod(methodName,paramType);
+                    method.invoke(bean,paramValue);
+                } catch (NoSuchMethodException e) {
+                    throw new RuntimeException(e);
+                } catch (InvocationTargetException e) {
+                    throw new RuntimeException(e);
+                } catch (IllegalAccessException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void removeBeanDefinition(String beanName) {
+        this.beanDefinitions.remove(beanName);
+        this.beanNames.remove(beanName);
+        this.rempveSingleton(beanName);
+    }
+
+    @Override
+    public BeanDefinition getBeanDefinition(String beanName) {
+        return beanDefinitions.get(beanName);
+    }
+
+    @Override
+    public boolean containsBeanDefinition(String beanName) {
+        return beanDefinitions.containsKey(beanName);
+    }
+
+    public void refresh() {
+        for (String beanName : this.beanNames) {
+            try {
+                getBean(beanName);
+            } catch (BeanException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 }

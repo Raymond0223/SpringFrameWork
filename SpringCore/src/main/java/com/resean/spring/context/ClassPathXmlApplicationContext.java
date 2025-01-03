@@ -1,30 +1,21 @@
 package com.resean.spring.context;
 
-import com.resean.spring.beans.BeanDefinition;
 import com.resean.spring.beans.BeanFactory;
 import com.resean.spring.beans.SimpleBeanFactory;
 import com.resean.spring.core.BeanException;
+import com.resean.spring.event.ApplicationEventPublisher;
 import com.resean.spring.resource.ClassPathXmlResource;
 import com.resean.spring.resource.Reource;
 import com.resean.spring.resource.XmlBeanDefinitionReader;
-import org.dom4j.Document;
-import org.dom4j.Element;
-import org.dom4j.io.SAXReader;
-
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * s
  *
  */
-public class ClassPathXmlApplicationContext {
+public class ClassPathXmlApplicationContext implements BeanFactory, ApplicationEventPublisher {
 
 
-   private BeanFactory beanFactory;
+   private SimpleBeanFactory beanFactory;
 
     /********************v1 ***********************/
 //    /**
@@ -40,12 +31,21 @@ public class ClassPathXmlApplicationContext {
     /********************v1 ***********************/
 
 
-    public ClassPathXmlApplicationContext(String fileName){
+    public ClassPathXmlApplicationContext(String fileName) {
+        this(fileName,true);
+    }
+
+
+    public ClassPathXmlApplicationContext(String fileName,boolean refresh) {
         Reource classPathXmlResource=new ClassPathXmlResource(fileName);
         SimpleBeanFactory factory=new SimpleBeanFactory();
         XmlBeanDefinitionReader xmlBeanDefinitionReader=new XmlBeanDefinitionReader(factory);
         xmlBeanDefinitionReader.loadBeandefinitions(classPathXmlResource);
         this.beanFactory=factory;
+
+        if (refresh){
+            this.beanFactory.refresh();
+        }
 
         /********************v1 ***********************/
 //        readXml(fileName);
@@ -99,6 +99,11 @@ public class ClassPathXmlApplicationContext {
 //        return singgleton.get(beanName);
     }
 
+    @Override
+    public boolean containsBean(String benaNae) {
+        return false;
+    }
+
 //    public void registerBeanDefinition(BeanDefinition beanDefinition){
 //        beanFactory.registerBeanDefinition(beanDefinition);
 //    }
@@ -112,5 +117,24 @@ public class ClassPathXmlApplicationContext {
         this.beanFactory.registerBean(beanName,object);
     }
 
+    @Override
+    public boolean isSingleton(String beanName) {
+        return false;
+    }
 
+    @Override
+    public boolean isPrototype(String beanName) {
+        return false;
+    }
+
+    @Override
+    public Class<?> getType(String beanName) {
+        return null;
+    }
+
+
+    @Override
+    public void publisherEvent() {
+
+    }
 }
