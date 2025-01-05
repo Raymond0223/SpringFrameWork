@@ -33,12 +33,12 @@ public class XmlBeanDefinitionReader {
                 String ref=propertyElement.attributeValue("ref");
                 String pValue="";
                 boolean isRef=false;
-                if (value!=null||value.equals("")){
-                    pValue=value;
-                }else if (ref!=null||ref.equals("")){
+                if (ref!=null && !ref.equals("")){
                     isRef=true;
                     pValue=ref;
                     refs.add(ref);
+                }else if (value!=null && !value.equals("")) {
+                    pValue = value;
                 }
                 propertyValues.addPropertyValue(new PropertyValue(name,pValue,type,isRef));
             }
@@ -54,7 +54,7 @@ public class XmlBeanDefinitionReader {
                 String name=constructorElement.attributeValue("name");
                 String value=constructorElement.attributeValue("value");
                 String type=constructorElement.attributeValue("type");
-                argumentValues.addGnericAgumentValue(new ArgumentValue(name,value,type));
+                argumentValues.addGnericAgumentValue(new ArgumentValue(name,type,value));
             }
             beanDefinition.setConstructorArgumentValues(argumentValues);
 

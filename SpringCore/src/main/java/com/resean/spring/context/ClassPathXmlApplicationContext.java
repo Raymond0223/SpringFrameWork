@@ -42,7 +42,6 @@ public class ClassPathXmlApplicationContext implements BeanFactory, ApplicationE
         XmlBeanDefinitionReader xmlBeanDefinitionReader=new XmlBeanDefinitionReader(factory);
         xmlBeanDefinitionReader.loadBeandefinitions(classPathXmlResource);
         this.beanFactory=factory;
-
         if (refresh){
             this.beanFactory.refresh();
         }

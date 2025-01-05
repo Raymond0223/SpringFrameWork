@@ -19,7 +19,7 @@ public class ArgumentValues {
     }
     //调用
     public ArgumentValue getIndexedArgumentValue(int index){
-        return this.indexedArgumentValues.get(index);
+        return this.genericArgumentValues.get(index);
     }
 
     //判断
