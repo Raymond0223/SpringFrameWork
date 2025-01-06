@@ -6,7 +6,7 @@
             <constructor-arg type="int" name="level" value="3"/>
             <property type="String" name="property1" value="Someone says"/>
             <property type="String" name="property2" value="Hello World!"/>
-            <property type="com.resean.spring.beans.RefSeviceImpl" name="refSevice" ref="refSevice"/>
+<!--            <property type="com.resean.spring.beans.RefSeviceImpl" name="refSevice" ref="refSevice"/>-->
         </bean>
 <!--        <bean id="basebaseservice" class="com.minis.test.BaseBaseService">-->
 <!--            <property type="com.minis.test.AServiceImpl" name="as" ref="aservice" />-->

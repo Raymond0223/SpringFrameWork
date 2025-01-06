@@ -1,12 +1,16 @@
 package com.resean.spring.context;
 
 import com.resean.spring.beans.factory.BeanFactory;
+import com.resean.spring.beans.factory.support.AutoWriedAnnotationBeanPostProcessor;
+import com.resean.spring.beans.factory.support.AutoWriedCapableBeanFactory;
 import com.resean.spring.beans.factory.support.SimpleBeanFactory;
 import com.resean.spring.core.BeanException;
 import com.resean.spring.event.ApplicationEventPublisher;
 import com.resean.spring.resource.ClassPathXmlResource;
 import com.resean.spring.resource.Reource;
 import com.resean.spring.beans.factory.xml.XmlBeanDefinitionReader;
+
+import java.util.List;
 
 /**
  * s
@@ -15,7 +19,7 @@ import com.resean.spring.beans.factory.xml.XmlBeanDefinitionReader;
 public class ClassPathXmlApplicationContext implements BeanFactory, ApplicationEventPublisher {
 
 
-   private SimpleBeanFactory beanFactory;
+   private AutoWriedCapableBeanFactory beanFactory;
 
     /********************v1 ***********************/
 //    /**
@@ -38,12 +42,12 @@ public class ClassPathXmlApplicationContext implements BeanFactory, ApplicationE
 
     public ClassPathXmlApplicationContext(String fileName,boolean refresh) {
         Reource classPathXmlResource=new ClassPathXmlResource(fileName);
-        SimpleBeanFactory factory=new SimpleBeanFactory();
+        AutoWriedCapableBeanFactory factory=new AutoWriedCapableBeanFactory();
         XmlBeanDefinitionReader xmlBeanDefinitionReader=new XmlBeanDefinitionReader(factory);
         xmlBeanDefinitionReader.loadBeandefinitions(classPathXmlResource);
         this.beanFactory=factory;
         if (refresh){
-            this.beanFactory.refresh();
+            refresh();
         }
 
         /********************v1 ***********************/
@@ -51,6 +55,10 @@ public class ClassPathXmlApplicationContext implements BeanFactory, ApplicationE
 //        initBeanDefinition();
     }
 
+    public void refresh(){
+        registerBeanPostProcessors(this.beanFactory);
+        onRefresh();
+    }
 
     /********************v1 ***********************/
 
@@ -136,4 +144,21 @@ public class ClassPathXmlApplicationContext implements BeanFactory, ApplicationE
     public void publisherEvent() {
 
     }
+
+    public List<AutoWriedAnnotationBeanPostProcessor> getProcessors(){
+        return this.beanFactory.getProcessors();
+    }
+
+    public void addBeanPostProcessor(AutoWriedAnnotationBeanPostProcessor processor){
+        this.beanFactory.addBeanPostProcessor(processor);
+    }
+
+    private void registerBeanPostProcessors(AutoWriedCapableBeanFactory beanFactory){
+        beanFactory.addBeanPostProcessor(new AutoWriedAnnotationBeanPostProcessor());
+    }
+
+    private void onRefresh(){
+        this.beanFactory.refresh();
+    }
+
 }

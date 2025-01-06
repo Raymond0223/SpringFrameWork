@@ -86,20 +86,20 @@ public class SimpleBeanFactory extends DefaultSingletonBeanRegistry implements B
 //    @Override
     public void registerBeanDefinition(BeanDefinition beanDefinition) {
         beanDefinitions.put(beanDefinition.getId(),beanDefinition);
-//        beanNames.add(beanDefinition.getId());
+        beanNames.add(beanDefinition.getId());
     }
 
     @Override
     public void registerBeanDefinition(String beanName, BeanDefinition beanDefinition) {
         this.beanDefinitions.put(beanName,beanDefinition);
         this.beanNames.add(beanName);
-//        if (!beanDefinition.isLazyInit()){
-//            try {
-//                getBean(beanName);
-//            } catch (BeanException e) {
-//                throw new RuntimeException(e);
-//            }
-//        }
+        if (!beanDefinition.isLazyInit()){
+            try {
+                getBean(beanName);
+            } catch (BeanException e) {
+                throw new RuntimeException(e);
+            }
+        }
 
     }
 

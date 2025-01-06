@@ -1,5 +1,7 @@
 package com.resean.spring.beans;
 
+import com.resean.spring.beans.annotation.Autowired;
+
 public class ExcuteSeviceImpl implements ExcuteSevice{
 
     private String name;
@@ -9,7 +11,10 @@ public class ExcuteSeviceImpl implements ExcuteSevice{
     private String property1;
     private String property2;
 
+    @Autowired
     private RefSeviceImpl refSevice;
+
+
 
 
     public ExcuteSeviceImpl(String name, int level) {

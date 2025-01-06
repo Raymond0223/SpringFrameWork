@@ -1,6 +1,7 @@
 package com.resean.spring.beans.factory.xml;
 
 import com.resean.spring.beans.factory.config.*;
+import com.resean.spring.beans.factory.support.AutoWriedCapableBeanFactory;
 import com.resean.spring.beans.factory.support.SimpleBeanFactory;
 import com.resean.spring.resource.Reource;
 import org.dom4j.Element;
@@ -13,9 +14,9 @@ import java.util.List;
  */
 public class XmlBeanDefinitionReader {
 
-    private SimpleBeanFactory beanFactory;
+    private AutoWriedCapableBeanFactory beanFactory;
 
-    public XmlBeanDefinitionReader(SimpleBeanFactory beanFactory) {
+    public XmlBeanDefinitionReader(AutoWriedCapableBeanFactory beanFactory) {
         this.beanFactory = beanFactory;
     }
 
