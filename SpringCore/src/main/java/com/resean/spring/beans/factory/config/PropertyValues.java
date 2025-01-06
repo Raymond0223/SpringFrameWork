@@ -1,4 +1,4 @@
-package com.resean.spring.beans;
+package com.resean.spring.beans.factory.config;
 
 import java.util.ArrayList;
 import java.util.List;

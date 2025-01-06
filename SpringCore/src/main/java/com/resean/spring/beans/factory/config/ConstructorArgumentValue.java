@@ -1,22 +1,22 @@
-package com.resean.spring.beans;
+package com.resean.spring.beans.factory.config;
 
 /**
  *
  */
-public class ArgumentValue {
+public class ConstructorArgumentValue {
     private String name;
 
     private String type;
 
     private Object value;
 
-    public ArgumentValue(String name, String type, Object value) {
+    public ConstructorArgumentValue(String name, String type, Object value) {
         this.name = name;
         this.type = type;
         this.value = value;
     }
 
-    public ArgumentValue(String type, Object value) {
+    public ConstructorArgumentValue(String type, Object value) {
         this.type = type;
         this.value = value;
     }

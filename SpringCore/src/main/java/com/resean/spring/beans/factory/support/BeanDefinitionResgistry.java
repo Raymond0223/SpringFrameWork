@@ -1,4 +1,6 @@
-package com.resean.spring.beans;
+package com.resean.spring.beans.factory.support;
+
+import com.resean.spring.beans.factory.config.BeanDefinition;
 
 /**
  * BeanDefinition 规范管理接口

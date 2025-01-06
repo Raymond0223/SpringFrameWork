@@ -1,4 +1,4 @@
-package com.resean.spring.beans;
+package com.resean.spring.beans.factory;
 
 import com.resean.spring.core.BeanException;
 

@@ -1,12 +1,12 @@
 package com.resean.spring.context;
 
-import com.resean.spring.beans.BeanFactory;
-import com.resean.spring.beans.SimpleBeanFactory;
+import com.resean.spring.beans.factory.BeanFactory;
+import com.resean.spring.beans.factory.support.SimpleBeanFactory;
 import com.resean.spring.core.BeanException;
 import com.resean.spring.event.ApplicationEventPublisher;
 import com.resean.spring.resource.ClassPathXmlResource;
 import com.resean.spring.resource.Reource;
-import com.resean.spring.resource.XmlBeanDefinitionReader;
+import com.resean.spring.beans.factory.xml.XmlBeanDefinitionReader;
 
 /**
  * s

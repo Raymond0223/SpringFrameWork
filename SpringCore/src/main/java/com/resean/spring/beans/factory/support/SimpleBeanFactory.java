@@ -1,12 +1,13 @@
-package com.resean.spring.beans;
+package com.resean.spring.beans.factory.support;
 
+import com.resean.spring.beans.factory.BeanFactory;
+import com.resean.spring.beans.factory.config.*;
 import com.resean.spring.core.BeanException;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Currency;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -14,7 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * 简单的 bean工厂实现类
  */
-public class SimpleBeanFactory extends DefaultSingletonBeanRegistry implements BeanFactory,BeanDefinitionResgistry{
+public class SimpleBeanFactory extends DefaultSingletonBeanRegistry implements BeanFactory, BeanDefinitionResgistry {
 
 
     /*************** v2 ****************/
@@ -23,7 +24,7 @@ public class SimpleBeanFactory extends DefaultSingletonBeanRegistry implements B
 //    private List<BeanDefinition> beanDefinitions=new ArrayList<>();
 
 
-    private Map<String,BeanDefinition> beanDefinitions=new ConcurrentHashMap<>(256);
+    private Map<String, BeanDefinition> beanDefinitions=new ConcurrentHashMap<>(256);
 
     private Map<String,Object> earlySingletonObjects=new ConcurrentHashMap<>(256);
 
@@ -126,27 +127,27 @@ public class SimpleBeanFactory extends DefaultSingletonBeanRegistry implements B
         try {
             beanClass=Class.forName(beanDefinition.getClassName());
             //处理构造器参数
-            ArgumentValues argumentValues=beanDefinition.getConstructorArgumentValues();
-            if (argumentValues!=null && !argumentValues.isEmpty()){
+            ConstructorArgumentValues constructorArgumentValues =beanDefinition.getConstructorArgumentValues();
+            if (constructorArgumentValues !=null && !constructorArgumentValues.isEmpty()){
                 //参数类型
-                Class<?>[] paramType=new Class[argumentValues.getGenericArgumentValueCount()];
+                Class<?>[] paramType=new Class[constructorArgumentValues.getGenericArgumentValueCount()];
                 //参数值
-                Object[] paramValue=new Object[argumentValues.getGenericArgumentValueCount()];
-                for (int i=0;i<argumentValues.getGenericArgumentValueCount();i++){
-                    ArgumentValue argumentValue=argumentValues.getIndexedArgumentValue(i);
+                Object[] paramValue=new Object[constructorArgumentValues.getGenericArgumentValueCount()];
+                for (int i = 0; i< constructorArgumentValues.getGenericArgumentValueCount(); i++){
+                    ConstructorArgumentValue constructorArgumentValue = constructorArgumentValues.getIndexedArgumentValue(i);
                     //根据不同类型判断
-                    if ("String".equals(argumentValue.getType())||"java.lang.String".equals(argumentValue.getType())){
+                    if ("String".equals(constructorArgumentValue.getType())||"java.lang.String".equals(constructorArgumentValue.getType())){
                         paramType[i]=String.class;
-                        paramValue[i]=argumentValue.getValue();
-                    }else if ("Integer".equals(argumentValue.getType())||"java.lang.Integer".equals(argumentValue.getType())){
+                        paramValue[i]= constructorArgumentValue.getValue();
+                    }else if ("Integer".equals(constructorArgumentValue.getType())||"java.lang.Integer".equals(constructorArgumentValue.getType())){
                         paramType[i]=Integer.class;
-                        paramValue[i]=Integer.valueOf((String)argumentValue.getValue());
-                    }else if ("int".equals(argumentValue.getType())){
+                        paramValue[i]=Integer.valueOf((String) constructorArgumentValue.getValue());
+                    }else if ("int".equals(constructorArgumentValue.getType())){
                         paramType[i]=int.class;
-                        paramValue[i]=Integer.valueOf((String)argumentValue.getValue());
+                        paramValue[i]=Integer.valueOf((String) constructorArgumentValue.getValue());
                     }else {
                         paramType[i]=String.class;
-                        paramValue[i]=argumentValue.getValue();
+                        paramValue[i]= constructorArgumentValue.getValue();
                     }
                 }
                 //按照构造器创建实例

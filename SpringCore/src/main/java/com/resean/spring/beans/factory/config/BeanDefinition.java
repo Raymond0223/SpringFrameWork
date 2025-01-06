@@ -1,4 +1,4 @@
-package com.resean.spring.beans;
+package com.resean.spring.beans.factory.config;
 
 /**
  * Bean定义，用于描述Bean的属性，包括Bean的类名、Bean的属性、Bean的依赖等
@@ -9,7 +9,7 @@ public class BeanDefinition {
     String SCOPE_PROTOTYPE = "prototype";
     private boolean lazyInit = false;
     private String[] dependsOn;
-    private ArgumentValues constructorArgumentValues;
+    private ConstructorArgumentValues constructorArgumentValues;
     private PropertyValues propertyValues;
     private String initMethodName;
     private volatile Object beanClass;
@@ -54,7 +54,7 @@ public class BeanDefinition {
         return dependsOn;
     }
 
-    public ArgumentValues getConstructorArgumentValues() {
+    public ConstructorArgumentValues getConstructorArgumentValues() {
         return constructorArgumentValues;
     }
 
@@ -90,7 +90,7 @@ public class BeanDefinition {
         this.dependsOn = dependsOn;
     }
 
-    public void setConstructorArgumentValues(ArgumentValues constructorArgumentValues) {
+    public void setConstructorArgumentValues(ConstructorArgumentValues constructorArgumentValues) {
         this.constructorArgumentValues = constructorArgumentValues;
     }
 

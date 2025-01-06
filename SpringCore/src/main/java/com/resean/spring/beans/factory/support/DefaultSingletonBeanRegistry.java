@@ -1,4 +1,6 @@
-package com.resean.spring.beans;
+package com.resean.spring.beans.factory.support;
+
+import com.resean.spring.beans.factory.config.SingletonBeanRegistry;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * 单例bean 注册默认实现类
  */
-public class DefaultSingletonBeanRegistry implements SingletonBeanRegistry{
+public class DefaultSingletonBeanRegistry implements SingletonBeanRegistry {
 
     private List<String> singletonName=new ArrayList<>();
 

@@ -1,6 +1,8 @@
-package com.resean.spring.resource;
+package com.resean.spring.beans.factory.xml;
 
-import com.resean.spring.beans.*;
+import com.resean.spring.beans.factory.config.*;
+import com.resean.spring.beans.factory.support.SimpleBeanFactory;
+import com.resean.spring.resource.Reource;
 import org.dom4j.Element;
 
 import java.util.ArrayList;
@@ -49,14 +51,14 @@ public class XmlBeanDefinitionReader {
 
             //处理构造器
             List<Element> constructorElements=element.elements("constructor-arg");
-            ArgumentValues argumentValues=new ArgumentValues();
+            ConstructorArgumentValues constructorArgumentValues =new ConstructorArgumentValues();
             for (Element constructorElement:constructorElements){
                 String name=constructorElement.attributeValue("name");
                 String value=constructorElement.attributeValue("value");
                 String type=constructorElement.attributeValue("type");
-                argumentValues.addGnericAgumentValue(new ArgumentValue(name,type,value));
+                constructorArgumentValues.addGnericAgumentValue(new ConstructorArgumentValue(name,type,value));
             }
-            beanDefinition.setConstructorArgumentValues(argumentValues);
+            beanDefinition.setConstructorArgumentValues(constructorArgumentValues);
 
             this.beanFactory.registerBeanDefinition(beanDefinition.getId(),beanDefinition);
         }
