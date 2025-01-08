@@ -3,7 +3,6 @@ package com.resean.spring.context;
 import com.resean.spring.beans.factory.BeanFactory;
 import com.resean.spring.beans.factory.support.AutoWriedAnnotationBeanPostProcessor;
 import com.resean.spring.beans.factory.support.AutoWriedCapableBeanFactory;
-import com.resean.spring.beans.factory.support.SimpleBeanFactory;
 import com.resean.spring.core.BeanException;
 import com.resean.spring.event.ApplicationEventPublisher;
 import com.resean.spring.resource.ClassPathXmlResource;

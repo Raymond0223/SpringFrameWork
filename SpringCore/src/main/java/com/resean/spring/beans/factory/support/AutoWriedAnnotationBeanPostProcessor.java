@@ -13,11 +13,11 @@ import java.lang.reflect.Field;
 public class AutoWriedAnnotationBeanPostProcessor implements BeanPostProcessor {
 
 
-    private AutoWriedCapableBeanFactory beanFactory;
+    private AbstracAutoWriedCapableBeanFactory beanFactory;
 
 
     @Override
-    public Object postProcessBeforeInitialization(Object bean, String beanName) {
+    public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeanException {
         Class<?> beanClass=bean.getClass();
         Object object=bean;
         Field[] fields=beanClass.getDeclaredFields();
@@ -49,7 +49,7 @@ public class AutoWriedAnnotationBeanPostProcessor implements BeanPostProcessor {
         return beanFactory;
     }
 
-    public void setBeanFactory(AutoWriedCapableBeanFactory beanFactory) {
+    public void setBeanFactory(AbstracAutoWriedCapableBeanFactory beanFactory) {
         this.beanFactory = beanFactory;
     }
 }
