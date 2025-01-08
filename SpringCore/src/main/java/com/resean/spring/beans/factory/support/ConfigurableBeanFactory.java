@@ -1,6 +1,7 @@
 package com.resean.spring.beans.factory.support;
 
 import com.resean.spring.beans.factory.BeanFactory;
+import com.resean.spring.beans.factory.config.BeanPostProcessor;
 import com.resean.spring.beans.factory.config.SingletonBeanRegistry;
 
 public interface ConfigurableBeanFactory extends BeanFactory, SingletonBeanRegistry {

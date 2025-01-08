@@ -1,5 +1,6 @@
-package com.resean.spring.beans.factory.support;
+package com.resean.spring.beans.factory.config;
 
+import com.resean.spring.beans.factory.support.AbstracAutoWriedCapableBeanFactory;
 import com.resean.spring.core.BeanException;
 
 public interface BeanPostProcessor {
@@ -19,5 +20,7 @@ public interface BeanPostProcessor {
      * @return
      */
     Object postProcessAfterInitialization(Object bean, String beanName)throws BeanException;
+
+    void setBeanFactory(AbstracAutoWriedCapableBeanFactory beanFactory);
 
 }

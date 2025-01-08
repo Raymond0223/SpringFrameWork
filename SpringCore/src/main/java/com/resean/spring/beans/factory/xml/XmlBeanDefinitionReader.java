@@ -14,9 +14,9 @@ import java.util.List;
  */
 public class XmlBeanDefinitionReader {
 
-    private AutoWriedCapableBeanFactory beanFactory;
+    private DefaultListableBeanFactory beanFactory;
 
-    public XmlBeanDefinitionReader(AutoWriedCapableBeanFactory beanFactory) {
+    public XmlBeanDefinitionReader(DefaultListableBeanFactory beanFactory) {
         this.beanFactory = beanFactory;
     }
 

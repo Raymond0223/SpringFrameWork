@@ -2,6 +2,7 @@ package com.resean.spring.beans.factory.support;
 
 import com.resean.spring.beans.annotation.Autowired;
 import com.resean.spring.beans.factory.BeanFactory;
+import com.resean.spring.beans.factory.config.BeanPostProcessor;
 import com.resean.spring.core.BeanException;
 
 import java.lang.reflect.Field;
@@ -49,6 +50,7 @@ public class AutoWriedAnnotationBeanPostProcessor implements BeanPostProcessor {
         return beanFactory;
     }
 
+    @Override
     public void setBeanFactory(AbstracAutoWriedCapableBeanFactory beanFactory) {
         this.beanFactory = beanFactory;
     }

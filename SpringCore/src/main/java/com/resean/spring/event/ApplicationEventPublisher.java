@@ -1,5 +1,8 @@
 package com.resean.spring.event;
 
 public interface ApplicationEventPublisher {
-    void publisherEvent();
+    void publisherEvent(ApplicationEvent applicationEvent);
+
+    void addApplicationListener(ApplicationListener applicationListener);
+
 }
